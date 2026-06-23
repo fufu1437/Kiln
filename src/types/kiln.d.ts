@@ -1,1 +1,0 @@
-/home/fufu/project/TypeScript/Kiln/.dist/src/kiln.d.ts

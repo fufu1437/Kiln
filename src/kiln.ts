@@ -10,14 +10,14 @@ export type language__t =
 	| 'c/cpp'
 	| 'java'
 
-type cStandard__t =
+export type cStandard__t =
 	| 'c89'
 	| 'c99'
 	| 'c11'
 	| 'c17'
 	| 'c23'
 
-type cppStandard__t =
+export type cppStandard__t =
 	| 'cpp98'
 	| 'cpp03'
 	| 'cpp11'
@@ -51,7 +51,7 @@ interface project_config__i<langs extends language__t> {
 	name: string,
 	version: string,
 
-	compiler: langs extends 'c' | 'cpp' | 'c/cpp'
+	compiler?: langs extends 'c' | 'cpp' | 'c/cpp'
 	? c_cpp_compiler__t
 	: java_compiler__t,
 
@@ -99,27 +99,29 @@ export class Project {
 	public getTarget() { return this.target }
 }
 
-type target_type_t =
+type target_type__t =
 	| 'executable'
 	| 'static_lib'
 	| 'dynamic_lib'
 
+export interface target_config__i {
+	name: string,
+	source: string[],
+	dep?: Array<Dependency | Target>,
+	include?: string[]
+	type: target_type__t,
+	args?: string[]
+}
+
 export class Target {
 	private name: string
 	private source: string[]
-	private dep: Dependency[] | undefined
+	private dep: Array<Dependency | Target> | undefined
 	private include: string[] | undefined
-	private type: target_type_t
+	private type: target_type__t
 	private args: string[] | undefined
 
-	constructor(config: {
-		name: string,
-		source: string[],
-		dep?: Dependency[],
-		include?: string[]
-		type: target_type_t,
-		args?: string[]
-	}) {
+	constructor(config: target_config__i) {
 		this.dep = config.dep
 		this.name = config.name
 		this.type = config.type
@@ -130,8 +132,8 @@ export class Target {
 
 	public getName(): string { return this.name }
 	public getSource(): string[] { return this.source }
-	public getType(): target_type_t { return this.type }
-	public getDep(): Dependency[] | undefined { return this.dep }
+	public getType(): target_type__t { return this.type }
+	public getDep(): Array<Dependency | Target> | undefined { return this.dep }
 	public getInclude(): string[] | undefined { return this.include }
 	public getArgs(): string[] | undefined { return this.args }
 }

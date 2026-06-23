@@ -1,15 +1,9 @@
-# kiln
+# 项目描述
+一个生成 `CMakeLists.txt` 配置文件的项目
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
 
 ```bash
-bun run index.ts
+./kiln init   # 初始化项目
+./kiln build  # 生成 `CMakeLists.txt`
+./kiln cbuild # 构建项目 尚未实现
 ```
-
-This project was created using `bun init` in bun v1.3.14. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

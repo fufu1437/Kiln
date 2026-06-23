@@ -15,7 +15,7 @@ import language from './lib/language.ts'
 
 import CMake from './lib/cmake.ts'
 
-const kiln_config_ts_value = `import { Project } from './.builds/.kiln/kiln.js'\n\nexport default (p: Project) => {
+const kiln_config_ts_value = `import { Project } from '${__dirname}/kiln.ts'\n\nexport default (p: Project) => {
 \tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c11',\n\t\tversion: '0.0.0',
 \t\tbuildTool: 'cmake',\n\t})\n}\n`
 
@@ -46,46 +46,7 @@ async function main(): Promise<number> {
 				console.log(`${kilnDSL} 是一个目录`)
 			}
 		}
-		const kilnTypeDef = fs.readFileSync(path.join(__dirname, '..', '.dist', 'kiln.d.ts'))
-		if (!fs.existsSync(outPath)) {
-			fs.mkdirSync(outPath)
-			fs.mkdirSync(kilnTypeKilnPath)
-			fs.writeFileSync(kilnTypeDefFile, kilnTypeDef)
-		}
-		else {
-			if (fs.statSync(outPath).isFile()) {
-				console.log(`${outPath} 是一个文件`)
-			}
-		}
 
-		if (!fs.existsSync(kilnTypeKilnPath)) {
-			fs.mkdirSync(kilnTypeKilnPath)
-			fs.writeFileSync(kilnTypeDefFile, kilnTypeDef)
-		}
-		else {
-			if (fs.statSync(kilnTypeKilnPath).isFile()) {
-				console.log(`${kilnTypeKilnPath} 是一个文件`)
-			}
-		}
-
-		if (!fs.existsSync(kilnTypeDefFile)) {
-			fs.writeFileSync(kilnTypeDefFile, kilnTypeDef)
-		}
-		else {
-			if (fs.statSync(kilnTypeDefFile).isDirectory()) {
-				console.log(`${kilnTypeDefFile} 是一个目录`)
-			}
-		}
-
-		if (!fs.existsSync(kilnTypeKilnJsFile)) {
-			const kilnTypeJsDef = fs.readFileSync(path.join(__dirname, '..', '.dist', 'kiln.js'))
-			fs.writeFileSync(kilnTypeKilnJsFile, kilnTypeJsDef)
-		}
-		else {
-			if (fs.statSync(kilnTypeKilnJsFile).isDirectory()) {
-				console.log(`${kilnTypeKilnJsFile} 是一个目录`)
-			}
-		}
 		return 0
 	}
 
@@ -101,12 +62,13 @@ async function main(): Promise<number> {
 		const target = project.getTarget()
 
 		const cmake = new CMake()
-
 		cmake.setVersion(config.buildToolVersion as string)
 		// cmake.setCompiler(config.compiler)
 		cmake.setProject(config.name, config.lang)
 
-
+		if (config.standard != 'java') {
+			cmake.setStandard(config.lang, config.standard)
+		}
 		for (const t of target) {
 			if (t === undefined) continue
 			cmake.addTarget(t)

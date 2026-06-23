@@ -1,4 +1,3 @@
-// import { Project, Dependency, Target } from './.builds/.kiln/kiln'
 import { Project, Dependency, Target } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
 
 export default (p: Project) => {

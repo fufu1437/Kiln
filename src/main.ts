@@ -7,7 +7,7 @@ import fs from 'node:fs'
 
 import { parseArgs } from 'node:util'
 
-import { Project, Target, Dependency, __dirname } from './kiln.ts'
+import { Project, Target, Dependency, __srcDir } from './kiln.ts'
 
 import path from 'path'
 
@@ -15,7 +15,7 @@ import language from './lib/language.ts'
 
 import CMake from './lib/cmake.ts'
 
-const kiln_config_ts_value = `import { Project } from '${__dirname}/kiln.ts'\n\nexport default (p: Project) => {
+const kiln_config_ts_value = `import { Project } from '${__srcDir}/kiln.ts'\n\nexport default (p: Project) => {
 \tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c11',\n\t\tversion: '0.0.0',
 \t\tbuildTool: 'cmake',\n\t})\n}\n`
 

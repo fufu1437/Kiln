@@ -3,7 +3,7 @@
 
 
 ```bash
-./kiln init   # 初始化项目
-./kiln build  # 生成 `CMakeLists.txt`
-./kiln cbuild # 构建项目 尚未实现
+kiln init   # 初始化项目
+kiln build  # 生成 `CMakeLists.txt`
+kiln cbuild # 构建项目 尚未实现
 ```

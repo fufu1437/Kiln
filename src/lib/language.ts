@@ -11,7 +11,7 @@ export interface language {
 }
 
 export default function getLang(): language | undefined {
-	const languages = path.join(__dirname, '..', 'src', 'languages')
+	const languages = path.join(__dirname, '..', 'languages')
 	const lang = process.env['LANG']?.split('.')[0] as string
 	let i18n!: language
 	if (lang == 'zh_CN') {

@@ -2,9 +2,13 @@ node_modules/
 .builds/
 .dist/
 .vscode/
-
+package/
 
 CMakeLists.txt
 out.txt
 *.log
 *.txt
+
+*.js.map
+
+*tgz

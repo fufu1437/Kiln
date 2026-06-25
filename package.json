@@ -1,6 +1,6 @@
 {
 	"name": "@fufu1437/kiln",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "A CMake configuration generation tool that uses TypeScript as its configuration language ",
 	"keywords": [
 		"cmake",

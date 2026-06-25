@@ -1,3 +1,6 @@
+## [0.0.10]
+修复当 `kiln.config.ts` 不存在时,程序尚未退出的BUG
+
 ## [0.0.9]
 修复当 `kiln.config.ts` 不存在时的报错
 添加no_config字段

@@ -60,6 +60,7 @@ async function main(): Promise<number> {
 		catch (error: unknown) {
 			if (error instanceof Object && 'code' in error && error.code === 'ERR_MODULE_NOT_FOUND') {
 				console.log(localeLang?.no_config)
+				return 2
 			}
 		}
 

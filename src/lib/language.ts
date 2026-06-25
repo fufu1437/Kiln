@@ -3,11 +3,10 @@ import fs from 'node:fs'
 
 import { __srcDir } from '../kiln.ts'
 
-// import zh_cn from '../languages/zh_cn.json' with {type: 'json'}
-
 export interface language {
 	help: string,
 	no_argv: string,
+	no_config: string
 }
 
 export default function getLang(): language | undefined {

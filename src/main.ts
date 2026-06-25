@@ -15,7 +15,7 @@ import language from './lib/language.ts'
 
 import CMake from './lib/cmake.ts'
 
-const kiln_config_ts_value = `import { Project } from '${__srcDir}/kiln.ts'\n\nexport default (p: Project) => {
+const kiln_config_ts_value = `import { Project } from '${/node_modules/.test(__srcDir) ? '@fufu1437/kiln' : `${__srcDir}/kiln.ts`}'\n\nexport default (p: Project) => {
 \tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c11',\n\t\tversion: '0.0.0',
 \t\tbuildTool: 'cmake',\n\t})\n}\n`
 
@@ -53,10 +53,17 @@ async function main(): Promise<number> {
 	else if (argv[2] === 'build') {
 		const kilnDSLJs = path.join()
 		const project = new Project()
-		const kiln = await import(kilnDSL)
+		let kiln
+		try {
+			kiln = await import(kilnDSL)
+		}
+		catch (error: unknown) {
+			if (error instanceof Object && 'code' in error && error.code === 'ERR_MODULE_NOT_FOUND') {
+				console.log(localeLang?.no_config)
+			}
+		}
+
 		kiln.default(project)
-		// console.log(project.getConfig())
-		// console.log(project.getTarget())
 
 		const config = project.getConfig()
 		const target = project.getTarget()
@@ -75,7 +82,8 @@ async function main(): Promise<number> {
 		}
 
 
-		console.log(cmake.out().join(''))
+		// console.log(cmake.out().join(''))
+		fs.writeFileSync("CMakeLists.txt", cmake.join(''))
 	}
 	else if (argv[2] === 'cbuild') {
 		try {

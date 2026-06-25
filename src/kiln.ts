@@ -89,10 +89,15 @@ export class Project {
 		this.lang = config.lang
 	}
 
+	// 添加构建目标
 	public addTarget(target: Target) {
 		this.target.push(target)
 	}
 
+	// 添加子目录
+	public addSubdirectory() {
+
+	}
 	public getConfig(): project_config__i<typeof this.lang> {
 		return this.config as project_config__i<typeof this.lang>
 	}
@@ -136,6 +141,14 @@ export class Target {
 	public getDep(): Array<Dependency | Target> | undefined { return this.dep }
 	public getInclude(): string[] | undefined { return this.include }
 	public getArgs(): string[] | undefined { return this.args }
+}
+
+export class Subdirectory {
+	constructor(config: {
+
+	}) {
+
+	}
 }
 
 // 占位符,尚未实际实现

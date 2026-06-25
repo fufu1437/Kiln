@@ -1,4 +1,5 @@
 {
 	"no_argv": "缺少子命令/标志",
+	"no_config": "kiln.config.ts 不存在",
 	"help": "用法:\n  | kiln [子命令]\n  | kiln [子命令] ...参数\n  | kiln ...参数\n\n子命令:\n  init  初始化项目\n  build 构建项目\n\n参数:\n  -h  --help  显示此帮助"
 }

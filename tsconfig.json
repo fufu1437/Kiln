@@ -20,7 +20,7 @@
 		"sourceMap": true,
 		"declaration": true,
 		"declarationMap": true,
-
+		"removeComments": true,
 		// import .ts -> .js rewrite (TS 5.7+)
 		"rewriteRelativeImportExtensions": true,
 

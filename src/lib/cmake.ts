@@ -152,7 +152,8 @@ export default class CMake {
 	// 	}
 	// }
 
-	public out() {
-		return this.outValue
+	public join(separator?: string) {
+		if (separator == undefined) return this.outValue.join()
+		else return this.outValue.join(separator)
 	}
 }

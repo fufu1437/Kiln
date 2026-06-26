@@ -68,7 +68,7 @@ interface project_config<langs extends language> {
 	buildToolVersion?: string
 }
 
-export interface target {
+export interface Target {
 	name: string
 	source: string[]
 	type:
@@ -76,19 +76,19 @@ export interface target {
 	| 'static_lib'
 	| 'dynamic_lib'
 
-	dep?: Array<target>
+	dep?: Array<Target>
 	include?: string[]
 	flags?: string[]
 }
 
 export class Project {
 	private config!: {}
-	private target: target[]
+	private target: Target[]
 	private lang!: language
 	private outPath: string
 	// private buildTool: c_cpp_buildools
 	constructor() {
-		this.target = new Array<target>()
+		this.target = new Array<Target>()
 		this.outPath = '.'
 		// this.buildTool = 'cmake'
 	}
@@ -103,7 +103,7 @@ export class Project {
 	}
 
 	// 添加构建目标
-	public addTarget(target: target) {
+	public addTarget(target: Target) {
 		this.target.push(target)
 	}
 
@@ -117,7 +117,7 @@ export class Project {
 	public getTarget() { return this.target }
 }
 
-export function isTarget(value: unknown): value is target {
+export function isTarget(value: unknown): value is Target {
 	if ((typeof value !== 'object') || (value === null)) {
 		return false
 	}
@@ -166,10 +166,10 @@ function isArrayString(value: unknown): value is string[] {
 // 	private source: string[]
 // 	private dep: Array<Dependency | Target> | undefined
 // 	private include: string[] | undefined
-// 	private type: targetype
+// 	private type: Targetype
 // 	private args: string[] | undefined
 
-// 	constructor(config: target_config) {
+// 	constructor(config: Target_config) {
 // 		this.dep = config.dep
 // 		this.name = config.name
 // 		this.type = config.type
@@ -180,7 +180,7 @@ function isArrayString(value: unknown): value is string[] {
 
 // 	public getName(): string { return this.name }
 // 	public getSource(): string[] { return this.source }
-// 	public getType(): targetype { return this.type }
+// 	public getType(): Targetype { return this.type }
 // 	public getDep(): Array<Dependency | Target> | undefined { return this.dep }
 // 	public getInclude(): string[] | undefined { return this.include }
 // 	public getArgs(): string[] | undefined { return this.args }
@@ -228,14 +228,14 @@ function isArrayString(value: unknown): value is string[] {
 // 	private version: string
 // 	private c_cppStandard: cOrCppStandard
 // 	private cmake_version: string
-// 	private target_l: Target[]
+// 	private Target_l: Target[]
 
 // 	constructor() {
 // 		this.name = ''
 // 		this.version = ''
 // 		this.cmake_version = ''
 // 		this.c_cppStandard = 'c17'
-// 		this.target_l = new Array<Target>()
+// 		this.Target_l = new Array<Target>()
 // 	}
 
 // 	public setName(name: string) {
@@ -255,7 +255,7 @@ function isArrayString(value: unknown): value is string[] {
 // 	}
 
 // 	public addTarget(t: Target) {
-// 		this.target_l.push(t)
+// 		this.Target_l.push(t)
 // 	}
 // }
 

@@ -1,13 +1,9 @@
-// import NodeVM from 'node:NodeVM'
-
 import { execSync } from 'child_process'
 
-import fs_promises from 'node:fs/promises'
 import fs from 'node:fs'
 
-import { parseArgs } from 'node:util'
 
-import { Project, Target, Dependency, __srcDir } from './kiln.ts'
+import { Project, __srcDir } from './kiln.ts'
 
 import path from 'path'
 
@@ -15,13 +11,13 @@ import language from './lib/language.ts'
 
 import CMake from './lib/cmake.ts'
 
-const kiln_config_ts_value = `import { Project } from '${/node_modules/.test(__srcDir) ? '@fufu1437/kiln' : `${__srcDir}/kiln.ts`}'\n\nexport default (p: Project) => {
+const kiln_configs_value = `import { Project } from '${/node_modules/.test(__srcDir) ? '@fufu1437/kiln' : `${__srcDir}/kiln.ts`}'\n\nexport default (p: Project) => {
 \tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c11',\n\t\tversion: '0.0.0',
 \t\tbuildTool: 'cmake',\n\t})\n}\n`
 
 const pack = '.builds'
 
-const kiln_config_ts = 'kiln.config.ts'
+const kiln_configs = 'kiln.config.ts'
 
 async function main(): Promise<number> {
 	const localeLang = language()
@@ -39,7 +35,7 @@ async function main(): Promise<number> {
 
 	if (argv[2] === 'init') {
 		if (!fs.existsSync(kilnDSL)) {
-			fs.writeFileSync(kilnDSL, kiln_config_ts_value)
+			fs.writeFileSync(kilnDSL, kiln_configs_value)
 		}
 		else {
 			if (fs.statSync(kilnDSL).isDirectory()) {

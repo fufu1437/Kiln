@@ -4,20 +4,20 @@ import path from 'path'
 export const __filename = url.fileURLToPath(import.meta.url)
 export const __srcDir = path.dirname(__filename)
 
-export type language__t =
+export type language =
 	| 'c'
 	| 'cpp'
 	| 'c/cpp'
 	| 'java'
 
-export type cStandard__t =
+export type cStandard =
 	| 'c89'
 	| 'c99'
 	| 'c11'
 	| 'c17'
 	| 'c23'
 
-export type cppStandard__t =
+export type cppStandard =
 	| 'cpp98'
 	| 'cpp03'
 	| 'cpp11'
@@ -27,61 +27,74 @@ export type cppStandard__t =
 	| 'cpp23'
 	| 'cpp26'
 
-type javaStandard__t =
+type javaStandard =
 	| 'java'
 
-type packageManager__t =
+type packageManager =
 	| 'ConanCenter'
 	| 'vcpkg'
 	| 'GitHub'
 
-export type c_cpp_compiler__t =
+export type c_cpp_compiler =
 	| 'gcc'
 	| 'clang'
 	| 'msvc'
 
-export type java_compiler__t =
+export type java_compiler =
 	| 'javac'
 
-type c_cpp_build_tools__t =
+type c_cpp_buildools =
 	| 'cmake'
 
-interface project_config__i<langs extends language__t> {
+interface project_config<langs extends language> {
 	lang: langs,
 	name: string,
 	version: string,
 
 	compiler?: langs extends 'c' | 'cpp' | 'c/cpp'
-	? c_cpp_compiler__t
-	: java_compiler__t,
+	? c_cpp_compiler
+	: java_compiler,
 
 	standard: langs extends 'c'
-	? cStandard__t
+	? cStandard
 	: (langs extends 'cpp' | 'c/cpp'
-		? cppStandard__t
-		: javaStandard__t
+		? cppStandard
+		: javaStandard
 	),
 
 	buildTool?: langs extends 'c' | 'cpp' | 'c/cpp'
-	? c_cpp_build_tools__t
+	? c_cpp_buildools
 	: '',
 	buildToolVersion?: string
 }
 
+export interface target {
+	name: string
+	source: string[]
+	type:
+	| 'executable'
+	| 'static_lib'
+	| 'dynamic_lib'
+
+	dep?: Array<target>
+	include?: string[]
+	flags?: string[]
+}
+
 export class Project {
 	private config!: {}
-	private target: Target[]
-	private lang!: language__t
+	private target: target[]
+	private lang!: language
 	private outPath: string
-	// private buildTool: c_cpp_build_tools__t
+	// private buildTool: c_cpp_buildools
 	constructor() {
-		this.target = new Array<Target>()
+		this.target = new Array<target>()
 		this.outPath = '.'
 		// this.buildTool = 'cmake'
 	}
 
 	public setOutPath(path: string) { this.outPath = path }
-	public setProject<langs extends language__t>(config: project_config__i<langs>) {
+	public setProject<langs extends language>(config: project_config<langs>) {
 		if (config.buildToolVersion === undefined) {
 			config.buildToolVersion = '4.3.4'
 		}
@@ -90,7 +103,7 @@ export class Project {
 	}
 
 	// 添加构建目标
-	public addTarget(target: Target) {
+	public addTarget(target: target) {
 		this.target.push(target)
 	}
 
@@ -98,87 +111,117 @@ export class Project {
 	public addSubdirectory() {
 
 	}
-	public getConfig(): project_config__i<typeof this.lang> {
-		return this.config as project_config__i<typeof this.lang>
+	public getConfig(): project_config<typeof this.lang> {
+		return this.config as project_config<typeof this.lang>
 	}
 	public getTarget() { return this.target }
 }
 
-type target_type__t =
-	| 'executable'
-	| 'static_lib'
-	| 'dynamic_lib'
+export function isTarget(value: unknown): value is target {
+	if ((typeof value !== 'object') || (value === null)) {
+		return false
+	}
 
-export interface target_config__i {
-	name: string,
-	source: string[],
-	dep?: Array<Dependency | Target>,
-	include?: string[]
-	type: target_type__t,
-	args?: string[]
+	if (!(
+		((('name' in value)) && (typeof value.name === 'string')) ||
+		((('type' in value)) && (typeof value.type === 'string')) ||
+		((('source' in value)) && (typeof value.source === 'string'))
+	)) {
+		return false
+	}
+
+	if (('dep' in value)) {
+		if (!Array.isArray(value.dep)) return false
+		for (const dep of value.dep) {
+			if (!isTarget(dep)) return false
+		}
+	}
+
+	if (('include' in value)) {
+		if ((value.include !== undefined) &&
+			(!isArrayString(value.include))
+		) {
+			return false
+		}
+	}
+
+	if (('flags' in value)) {
+		if ((value.flags !== undefined) &&
+			(!isArrayString(value.flags))
+		) {
+			return false
+		}
+	}
+
+	return true
 }
 
-export class Target {
-	private name: string
-	private source: string[]
-	private dep: Array<Dependency | Target> | undefined
-	private include: string[] | undefined
-	private type: target_type__t
-	private args: string[] | undefined
-
-	constructor(config: target_config__i) {
-		this.dep = config.dep
-		this.name = config.name
-		this.type = config.type
-		this.source = config.source
-		this.args = config.args
-		this.include = config.include
-	}
-
-	public getName(): string { return this.name }
-	public getSource(): string[] { return this.source }
-	public getType(): target_type__t { return this.type }
-	public getDep(): Array<Dependency | Target> | undefined { return this.dep }
-	public getInclude(): string[] | undefined { return this.include }
-	public getArgs(): string[] | undefined { return this.args }
+function isArrayString(value: unknown): value is string[] {
+	if (!Array.isArray(value)) return false
+	return value.every(item => typeof item === 'string')
 }
 
-export class Subdirectory {
-	constructor(config: {
+// export class Target {
+// 	private name: string
+// 	private source: string[]
+// 	private dep: Array<Dependency | Target> | undefined
+// 	private include: string[] | undefined
+// 	private type: targetype
+// 	private args: string[] | undefined
 
-	}) {
+// 	constructor(config: target_config) {
+// 		this.dep = config.dep
+// 		this.name = config.name
+// 		this.type = config.type
+// 		this.source = config.source
+// 		this.args = config.args
+// 		this.include = config.include
+// 	}
 
-	}
-}
+// 	public getName(): string { return this.name }
+// 	public getSource(): string[] { return this.source }
+// 	public getType(): targetype { return this.type }
+// 	public getDep(): Array<Dependency | Target> | undefined { return this.dep }
+// 	public getInclude(): string[] | undefined { return this.include }
+// 	public getArgs(): string[] | undefined { return this.args }
+// }
 
-// 占位符,尚未实际实现
-export class Dependency {
-	private lang: language__t
-	private packName: packageManager__t
-	private url: string | undefined
+// export class Subdirectory {
+// 	constructor(config: {
 
-	constructor(config: {
-		// lang: language__t,
-		packName: packageManager__t,
-		url?: string
-	}) {
-		this.lang = 'c'
-		this.packName = config.packName
-		this.url = config.url
-	}
+// 	}) {
 
-	public setLang(lang: language__t) {
-		this.lang = lang
-	}
+// 	}
+// }
 
-	public getPackName(): packageManager__t {
-		return this.packName
-	}
+// // 占位符,尚未实际实现
+// export class Dependency {
+// 	private lang: language
+// 	private packName: packageManager
+// 	private url: string | undefined
 
-	public getUrl(): string | undefined {
-		return this.url
-	}
-}
+// 	constructor(config: {
+// 		// lang: language,
+// 		packName: packageManager,
+// 		url?: string
+// 	}) {
+// 		this.lang = 'c'
+// 		this.packName = config.packName
+// 		this.url = config.url
+// 	}
+
+// 	public setLang(lang: language) {
+// 		this.lang = lang
+// 	}
+
+// 	public getPackName(): packageManager {
+// 		return this.packName
+// 	}
+
+// 	public getUrl(): string | undefined {
+// 		return this.url
+// 	}
+// }
 
 // export class Project {
 // 	private name: string

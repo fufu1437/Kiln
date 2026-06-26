@@ -1,11 +1,13 @@
-import { Target, Dependency } from '../kiln.ts'
+import {
+	isTarget
+} from '../kiln.ts'
 import type {
-	language__t,
-	c_cpp_compiler__t,
-	java_compiler__t,
-	target_config__i,
-	cppStandard__t,
-	cStandard__t
+	language,
+	c_cpp_compiler,
+	java_compiler,
+	cppStandard,
+	cStandard,
+	target
 } from '../kiln.ts'
 import { exec } from 'child_process'
 
@@ -21,8 +23,8 @@ export default class CMake {
 	}
 
 	public setProject(n: string): void
-	public setProject(n: string, l: language__t): void
-	public setProject(n: string, l?: language__t): void {
+	public setProject(n: string, l: language): void
+	public setProject(n: string, l?: language): void {
 
 		if (l == 'c') {
 			this.outValue.push(`project(${n} LANGUAGES C)\n`)
@@ -38,7 +40,7 @@ export default class CMake {
 		}
 	}
 
-	// public setCompiler(c: c_cpp_compiler__t | java_compiler__t) {
+	// public setCompiler(c: c_cpp_compiler_ | java_compiler_) {
 	// // set(CMAKE_C_COMPILER "/usr/bin/gcc")
 	// // set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 	// if (c == 'gcc') {
@@ -63,7 +65,7 @@ export default class CMake {
 		]
 	}
 
-	public setStandard<langs extends language__t>(l: language__t, s: cStandard__t | cppStandard__t): void {
+	public setStandard<langs extends language>(l: language, s: cStandard | cppStandard): void {
 		if (l == 'c') {
 			this.outValue.push(...this.setCStandard(s.replace(/^c+/, '')))
 		}
@@ -76,59 +78,57 @@ export default class CMake {
 		}
 	}
 
-	private buildDep(d: Dependency | Target): string[] {
+	private buildDep(d: target): string[] {
 		const cmake_str = new Array<string>()
-		if (d instanceof Dependency) {
-		}
-		else if (d instanceof Target) {
-			const deps = d.getDep()
+
+		if (isTarget(d)) {
+			const deps = d.dep
 			if (deps != undefined) {
 				for (const dep of deps) {
 					cmake_str.push(...this.buildDep(dep))
 				}
 			}
 			// d.getType() == 'static_lib' ? 'STATIC' : 'SHARED'
-			if (d.getType() == 'static_lib') {
-				cmake_str.push(`add_library(${d.getName()} STATIC ${d.getSource()?.join(' ')})\n`)
+			if (d.type == 'static_lib') {
+				cmake_str.push(`add_library(${d.name} STATIC ${d.source?.join(' ')})\n`)
 			}
 			else {
-				cmake_str.push(`add_library(${d.getName()} SHARED ${d.getSource()?.join(' ')})\n`)
+				cmake_str.push(`add_library(${d.name} SHARED ${d.source?.join(' ')})\n`)
 			}
-			if (d.getInclude() != undefined) {
-				cmake_str.push(`target_include_directories(${d.getName()} PRIVATE ${d.getInclude()?.join(' ')})\n`)
+			if (d.include != undefined) {
+				cmake_str.push(`targetnclude_directories(${d.name} PRIVATE ${d.include?.join(' ')})\n`)
 			}
-			// this.outValue.push(`target_include_directories(${d.getName()} STATIC PRIVATE ${d.getSource().join(' ')})\n`)
+			// this.outValue.push(`targetnclude_directories(${d.name} STATIC PRIVATE ${d.source.join(' ')})\n`)
 		}
 
 		return cmake_str
 	}
 
-	public addTarget(t: Target) {
-		const name = t.getName().trim()
+	public addTarget(t: target) {
+		const name = t.name.trim()
 		if (name === '') {
 			return
 		}
 
-		const deps = t.getDep()
+		const deps = t.dep
 		const depPackNames = new Array<string>()
 		if (deps != undefined) {
 			for (const dep of deps) {
-				if (dep instanceof Dependency) {
-					this.buildDep(dep)
-				}
-				if (dep instanceof Target) {
-					depPackNames.push(dep.getName())
-					let asd = this.buildDep(dep)
-					this.outValue.push(...asd)
-				}
+				// if (dep instanceof Dependency) {
+				// 	this.buildDep(dep)
+				// }
+				depPackNames.push(dep.name)
+				let asd = this.buildDep(dep)
+				this.outValue.push(...asd)
+
 			}
 		}
 
 		this.outValue.push(`add_executable(${name})\n`)
-		if (t.getInclude() != undefined) {
-			this.outValue.push(`target_include_directories(${name} PRIVATE ${t.getInclude()?.join(' ')})\n`)
+		if (t.include != undefined) {
+			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${t.include?.join(' ')})\n`)
 		}
-		this.outValue.push(`target_sources(${name} PRIVATE ${t.getSource().join(' ')})\n`)
+		this.outValue.push(`target_sources(${name} PRIVATE ${t.source.join(' ')})\n`)
 		if (depPackNames.length != 0) {
 			this.outValue.push(`target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
 		}
@@ -136,17 +136,17 @@ export default class CMake {
 
 	// public addLib(d: Dependency) {
 	// 	if (d.getType() == 'static_lib') {
-	// 		this.outValue.push(`add_library(${name} PRIVATE ${d.getInclude()?.join(' ')})\n`)
-	// 		if (d.getInclude() != undefined) {
-	// 			this.outValue.push(`target_include_directories(${name} PRIVATE ${d.getInclude()?.join(' ')})\n`)
+	// 		this.outValue.push(`add_library(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 		if (d.include != undefined) {
+	// 			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
 	// 		}
 	// 		this.outValue.push
 	// 	}
 
 	// 	else if (d.getType() == 'dynamic_lib') {
 
-	// 		if (d.getInclude() != undefined) {
-	// 			this.outValue.push(`target_include_directories(${name} PRIVATE ${d.getInclude()?.join(' ')})\n`)
+	// 		if (d.include != undefined) {
+	// 			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
 	// 		}
 
 	// 	}

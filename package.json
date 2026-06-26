@@ -1,7 +1,11 @@
 {
 	"name": "@fufu1437/kiln",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "A CMake configuration generation tool that uses TypeScript as its configuration language ",
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "npm run build"
+	},
 	"keywords": [
 		"cmake",
 		"build-tool",
@@ -36,10 +40,6 @@
 		"!**/*.map",
 		"!*.txt"
 	],
-	"scripts": {
-		"build": "tsc",
-		"prepublishOnly": "npm run build"
-	},
 	"dependencies": {
 		"undici-types": "^7.24.6"
 	},

@@ -1,10 +1,13 @@
 {
 	"name": "@fufu1437/kiln",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"description": "A CMake configuration generation tool that uses TypeScript as its configuration language ",
 	"scripts": {
 		"build": "tsc",
 		"prepublishOnly": "npm run build",
+		"publish:patch": "npm version patch",
+		"publish:minor": "npm version minor",
+		"publish:major": "npm version major",
 		"publish": "npm publish --registry=https://registry.npmjs.org --access public"
 	},
 	"keywords": [

@@ -126,11 +126,11 @@ export default class CMake {
 
 		this.outValue.push(`add_executable(${name})\n`)
 		if (t.include != undefined) {
-			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${t.include?.join(' ')})\n`)
+			this.outValue.push(`target_include_directories(${name} PRIVATE ${t.include?.join(' ')})\n`)
 		}
-		this.outValue.push(`Target_sources(${name} PRIVATE ${t.source.join(' ')})\n`)
+		this.outValue.push(`target_sources(${name} PRIVATE ${t.source.join(' ')})\n`)
 		if (depPackNames.length != 0) {
-			this.outValue.push(`Target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
+			this.outValue.push(`target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
 		}
 	}
 

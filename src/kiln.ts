@@ -169,7 +169,7 @@ function isArrayString(value: unknown): value is string[] {
 // 	private type: Targetype
 // 	private args: string[] | undefined
 
-// 	constructor(config: Target_config) {
+// 	constructor(config: target_config) {
 // 		this.dep = config.dep
 // 		this.name = config.name
 // 		this.type = config.type
@@ -228,14 +228,14 @@ function isArrayString(value: unknown): value is string[] {
 // 	private version: string
 // 	private c_cppStandard: cOrCppStandard
 // 	private cmake_version: string
-// 	private Target_l: Target[]
+// 	private target_l: Target[]
 
 // 	constructor() {
 // 		this.name = ''
 // 		this.version = ''
 // 		this.cmake_version = ''
 // 		this.c_cppStandard = 'c17'
-// 		this.Target_l = new Array<Target>()
+// 		this.target_l = new Array<Target>()
 // 	}
 
 // 	public setName(name: string) {
@@ -255,7 +255,7 @@ function isArrayString(value: unknown): value is string[] {
 // 	}
 
 // 	public addTarget(t: Target) {
-// 		this.Target_l.push(t)
+// 		this.target_l.push(t)
 // 	}
 // }
 

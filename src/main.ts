@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const currentDirName = basename(__dirname)
 
 const kiln_configs_value = `import { Project } from '${/node_modules/.test(__srcDir) ? '@fufu1437/kiln' : `${__srcDir}/kiln.ts`}'\n\nexport default (p: Project) => {
-\tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c11',\n\t\tversion: '0.0.0',
+\tp.setProject({\n\t\tname: 'default',\n\t\tlang: 'c',\n\t\tcompiler: 'gcc',\n\t\tstandard: 'c17',\n\t\tversion: '0.0.0',
 \t\tbuildTool: 'cmake',\n\t})\n}\n`
 
 async function main(): Promise<number> {

@@ -96,9 +96,9 @@ export default class CMake {
 				cmake_str.push(`add_library(${d.name} SHARED ${d.source?.join(' ')})\n`)
 			}
 			if (d.include != undefined) {
-				cmake_str.push(`Target_include_directories(${d.name} PRIVATE ${d.include?.join(' ')})\n`)
+				cmake_str.push(`target_include_directories(${d.name} PRIVATE ${d.include?.join(' ')})\n`)
 			}
-			// this.outValue.push(`Targetnclude_directories(${d.name} STATIC PRIVATE ${d.source.join(' ')})\n`)
+
 		}
 
 		return cmake_str

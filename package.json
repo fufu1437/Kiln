@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "tsc",
 		"prepublishOnly": "npm run build",
-		"publish": "npm publish --access public"
+		"publish": "npm publish --registry=https://registry.npmjs.org --access public"
 	},
 	"keywords": [
 		"cmake",

@@ -1,4 +1,4 @@
-import { Project, Dependency, Target } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
+import { Project, Target } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
 
 export default (p: Project) => {
 	p.setProject({
@@ -10,16 +10,16 @@ export default (p: Project) => {
 		buildToolVersion: '4.3.1'
 	})
 
-	let d = new Target({
+	let d: Target = {
 		name: 'hello',
 		type: 'static_lib',
 		source: [
 			'test/lib/hello.c'
 		],
 		include: ['test/include']
-	})
+	}
 
-	let a = new Target({
+	let a: Target = {
 		name: 'main',
 		type: 'executable',
 		source: [
@@ -28,7 +28,7 @@ export default (p: Project) => {
 		],
 		include: ['test/include'],
 		dep: [d]
-	})
+	}
 	p.addTarget(a)
 
 

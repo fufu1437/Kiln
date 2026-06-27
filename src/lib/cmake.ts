@@ -7,7 +7,7 @@ import type {
 	java_compiler,
 	cppStandard,
 	cStandard,
-	target
+	Target
 } from '../kiln.ts'
 import { exec } from 'child_process'
 
@@ -78,7 +78,7 @@ export default class CMake {
 		}
 	}
 
-	private buildDep(d: target): string[] {
+	private buildDep(d: Target): string[] {
 		const cmake_str = new Array<string>()
 
 		if (isTarget(d)) {
@@ -96,15 +96,15 @@ export default class CMake {
 				cmake_str.push(`add_library(${d.name} SHARED ${d.source?.join(' ')})\n`)
 			}
 			if (d.include != undefined) {
-				cmake_str.push(`targetnclude_directories(${d.name} PRIVATE ${d.include?.join(' ')})\n`)
+				cmake_str.push(`Target_include_directories(${d.name} PRIVATE ${d.include?.join(' ')})\n`)
 			}
-			// this.outValue.push(`targetnclude_directories(${d.name} STATIC PRIVATE ${d.source.join(' ')})\n`)
+			// this.outValue.push(`Targetnclude_directories(${d.name} STATIC PRIVATE ${d.source.join(' ')})\n`)
 		}
 
 		return cmake_str
 	}
 
-	public addTarget(t: target) {
+	public addTarget(t: Target) {
 		const name = t.name.trim()
 		if (name === '') {
 			return
@@ -126,11 +126,11 @@ export default class CMake {
 
 		this.outValue.push(`add_executable(${name})\n`)
 		if (t.include != undefined) {
-			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${t.include?.join(' ')})\n`)
+			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${t.include?.join(' ')})\n`)
 		}
-		this.outValue.push(`target_sources(${name} PRIVATE ${t.source.join(' ')})\n`)
+		this.outValue.push(`Target_sources(${name} PRIVATE ${t.source.join(' ')})\n`)
 		if (depPackNames.length != 0) {
-			this.outValue.push(`target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
+			this.outValue.push(`Target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
 		}
 	}
 
@@ -138,7 +138,7 @@ export default class CMake {
 	// 	if (d.getType() == 'static_lib') {
 	// 		this.outValue.push(`add_library(${name} PRIVATE ${d.include?.join(' ')})\n`)
 	// 		if (d.include != undefined) {
-	// 			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
 	// 		}
 	// 		this.outValue.push
 	// 	}
@@ -146,7 +146,7 @@ export default class CMake {
 	// 	else if (d.getType() == 'dynamic_lib') {
 
 	// 		if (d.include != undefined) {
-	// 			this.outValue.push(`targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
 	// 		}
 
 	// 	}

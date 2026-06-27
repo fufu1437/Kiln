@@ -83,12 +83,12 @@ export interface Target {
 
 export class Project {
 	private config!: {}
-	private target: Target[]
+	private Target: Target[]
 	private lang!: language
 	private outPath: string
 	// private buildTool: c_cpp_buildools
 	constructor() {
-		this.target = new Array<Target>()
+		this.Target = new Array<Target>()
 		this.outPath = '.'
 		// this.buildTool = 'cmake'
 	}
@@ -103,8 +103,8 @@ export class Project {
 	}
 
 	// 添加构建目标
-	public addTarget(target: Target) {
-		this.target.push(target)
+	public addTarget(Target: Target) {
+		this.Target.push(Target)
 	}
 
 	// 添加子目录
@@ -114,7 +114,7 @@ export class Project {
 	public getConfig(): project_config<typeof this.lang> {
 		return this.config as project_config<typeof this.lang>
 	}
-	public getTarget() { return this.target }
+	public getTarget() { return this.Target }
 }
 
 export function isTarget(value: unknown): value is Target {

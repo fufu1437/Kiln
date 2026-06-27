@@ -1,8 +1,8 @@
 node_modules/
-.builds/
-.dist/
-.vscode/
 package/
+.builds/
+.vscode/
+dist/
 
 publish
 .npmrc

@@ -1,13 +1,10 @@
 {
 	"name": "@fufu1437/kiln",
-	"version": "0.0.15",
+	"version": "0.0.16",
 	"description": "A CMake configuration generation tool that uses TypeScript as its configuration language ",
 	"scripts": {
 		"build": "tsc",
-		"prepublishOnly": "npm run build",
-		"publish:patch": "npm version patch --force",
-		"publish:minor": "npm version minor --force",
-		"publish:major": "npm version major --force"
+		"prepublishOnly": "npm run build"
 	},
 	"keywords": [
 		"cmake",
@@ -25,8 +22,8 @@
 	"license": "LGPL-3.0-only",
 	"author": "fufu1437 (https://github.com/fufu1437)",
 	"type": "module",
-	"main": ".dist/kiln.js",
-	"types": ".dist/kiln.d.ts",
+	"main": "dist/kiln.js",
+	"types": "dist/kiln.d.ts",
 	"bin": {
 		"kiln": "bin/kiln"
 	},
@@ -35,7 +32,7 @@
 		"test": "test"
 	},
 	"files": [
-		".dist",
+		"dist",
 		"bin",
 		"README.md",
 		"CHANGELOG.md",

@@ -4,6 +4,7 @@ node_modules/
 .vscode/
 package/
 
+publish
 .npmrc
 CMakeLists.txt
 out.txt

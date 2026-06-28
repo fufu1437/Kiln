@@ -59,6 +59,8 @@ async function main(): Promise<number> {
 				console.log(localeLang?.no_config)
 				return 2
 			}
+			console.error(error)
+			throw error
 		}
 
 		kiln.default(project)

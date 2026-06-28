@@ -132,13 +132,23 @@ export default class CMake {
 		if (depPackNames.length != 0) {
 			this.outValue.push(`target_link_libraries(${name} PRIVATE ${depPackNames.join(' ')})\n`)
 		}
+		const flags = t.flags
+		if (flags !== undefined && flags?.length != 0) {
+			this.outValue.push(`target_compile_options(${name} PRIVATE ${flags.join(' ')})\n`)
+		}
 	}
+
+	public addSubdirectory(path: string) {
+		this.outValue.push(path)
+	}
+
+
 
 	// public addLib(d: Dependency) {
 	// 	if (d.getType() == 'static_lib') {
-	// 		this.outValue.push(`add_library(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 		this.outValue.push(`add_library(${ name } PRIVATE ${ d.include?.join(' ') }) \n`)
 	// 		if (d.include != undefined) {
-	// 			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 			this.outValue.push(`Targetnclude_directories(${ name } PRIVATE ${ d.include?.join(' ') }) \n`)
 	// 		}
 	// 		this.outValue.push
 	// 	}
@@ -146,7 +156,7 @@ export default class CMake {
 	// 	else if (d.getType() == 'dynamic_lib') {
 
 	// 		if (d.include != undefined) {
-	// 			this.outValue.push(`Targetnclude_directories(${name} PRIVATE ${d.include?.join(' ')})\n`)
+	// 			this.outValue.push(`Targetnclude_directories(${ name } PRIVATE ${ d.include?.join(' ') }) \n`)
 	// 		}
 
 	// 	}
@@ -155,5 +165,9 @@ export default class CMake {
 	public join(separator?: string) {
 		if (separator == undefined) return this.outValue.join()
 		else return this.outValue.join(separator)
+	}
+
+	public clean() {
+		this.outValue.length = 0
 	}
 }

@@ -65,7 +65,9 @@ interface project_config<langs extends language> {
 	buildTool?: langs extends 'c' | 'cpp' | 'c/cpp'
 	? c_cpp_buildools
 	: '',
-	buildToolVersion?: string
+	buildToolVersion?: string,
+
+	dirname?: string
 }
 
 export interface Target {
@@ -93,7 +95,18 @@ export class Project {
 		// this.buildTool = 'cmake'
 	}
 
+	// public constructor(config: project_config<langs>) {
+	// 	if (config.buildToolVersion === undefined) {
+	// 		config.buildToolVersion = '4.3.4'
+	// 	}
+	// 	this.Target = new Array<Target>()
+	// 	this.outPath = '.'
+	// 	this.config = config
+	// 	this.lang = config.lang
+	// }
+
 	public setOutPath(path: string) { this.outPath = path }
+
 	public setProject<langs extends language>(config: project_config<langs>) {
 		if (config.buildToolVersion === undefined) {
 			config.buildToolVersion = '4.3.4'

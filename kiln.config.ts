@@ -1,12 +1,13 @@
-import { Project, Target } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
+import { Project } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
+import type { Target } from '/home/fufu/project/TypeScript/Kiln/src/kiln.ts'
 
 export default (p: Project) => {
 	p.setProject({
 		name: 'test',
 		lang: 'c',
 		compiler: 'gcc',
-		standard: 'c11',
-		version: '',
+		standard: 'c17',
+		version: '0.0.0',
 		buildToolVersion: '4.3.1'
 	})
 
@@ -27,7 +28,10 @@ export default (p: Project) => {
 			'test/maths.c',
 		],
 		include: ['test/include'],
-		dep: [d]
+		dep: [d],
+		flags: [
+			''
+		]
 	}
 	p.addTarget(a)
 

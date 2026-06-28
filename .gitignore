@@ -3,6 +3,7 @@ package/
 .builds/
 .vscode/
 dist/
+cmake-project-template
 
 publish
 .npmrc
